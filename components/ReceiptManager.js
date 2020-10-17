@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { AppRegistry, TouchableOpacity, Button, SafeAreaView,
+  Image,
   StyleSheet, View, Text, TextInput } from 'react-native';
 
 import DataTable from "./DataTable.js";
 import Receipt from "../classes/receipt.js";
 import AsyncStorage from '@react-native-community/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios'
 
 
 class ReceiptManager extends Component {
@@ -17,11 +20,12 @@ class ReceiptManager extends Component {
       newReceiptDate: "Date",
       newReceiptStoreName: "Store Name",
       receipts: [],
-      image: undefined
+      image: {}
     }
 
     this.addReceipt = this.addReceipt.bind(this)
     this.addReceiptOnPress = this.addReceiptOnPress.bind(this)
+    this.pickImage = this.pickImage.bind(this)
   }
 
   componentWillMount() {
@@ -84,7 +88,7 @@ class ReceiptManager extends Component {
 
 
   // the action buttons for the table of receipts
-  actionButtons(receipt) {
+  actionButtons(receipt, indexOfReceipt) {
     return (
       <View style={styles.actions}>
         <TouchableOpacity
@@ -96,9 +100,7 @@ class ReceiptManager extends Component {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteBtn}
-          onPress={() => this.props.navigation.navigate("Receipt Editor", {
-            receiptId: receipt.getId()
-          })}>
+          onPress={() => this.deleteReceipt(indexOfReceipt)}>
           <Text>-</Text>
         </TouchableOpacity>
       </View>
@@ -108,7 +110,17 @@ class ReceiptManager extends Component {
   /*
     Deletes a receipt from the
   */
-  deleteReceipt() {
+  async deleteReceipt(index) {
+    // update local storage
+    loadReceipts().then(
+      (receipts) => {
+        // remove the desired receipt
+        var tempReceipts = receipts
+        tempReceipts.splice(index)
+      }
+    )
+
+
 
   }
 
@@ -122,9 +134,49 @@ class ReceiptManager extends Component {
 
     console.log(result);
 
+    // upload to server
+    let uriParts = result.uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+
+    let formData = new FormData();
+    formData.append('image', {
+      uri: result.uri,
+      name: `photo.${fileType}`,
+      type: `image/${fileType}`,
+    });
+
+    console.log(JSON.stringify(formData));
+
+    // Tests I've tried:
+    /*
+      1. remove the s from headers
+      2. remove the headers all together, which gets rid of the boundry error
+        but makes the file on the server side undefined.
+      3. I removed the accept application/json line to no avail
+      4. I have used the axios library instead of the fetch call.
+
+
+    */
+
+
+    let options = {
+      method: 'POST',
+      body: formData,
+      header: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
+      },
+    };
+
     if (!result.cancelled) {
-      setImage(result.uri);
+      this.setState({
+        image: result.uri
+      });
     }
+
+    fetch("http://localhost:8080/upload_receipt_img", options)
+      .then(result => console.log(result))
+
   };
 
 
@@ -137,16 +189,20 @@ class ReceiptManager extends Component {
     var newReceiptList = this.state.receipts
     newReceiptList.push(newReceipt)
 
+    // convert the new receipt to an array
     var newReceiptRow = newReceipt.toArray()
 
+    // save receipts to local storage
     this.saveReceipts(newReceiptList)
 
+    // add the action buttons to the new row
     newReceiptRow.push(
-      this.actionButtons(newReceipt)
+      this.actionButtons(newReceipt, this.state.rows.length)
     )
 
     newRows.push(newReceiptRow)
 
+    // update the receipts and rows states
     this.setState({
         rows: newRows,
         receipts: newReceiptList
@@ -187,13 +243,11 @@ class ReceiptManager extends Component {
               onPress={this.addReceiptOnPress} >
               <Text>Add Receipt</Text>
             </TouchableOpacity>
-
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Button title="Pick an image from camera roll" onPress={this.pickImage} />
-              {this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
-            </View>
-          </View>
-
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Button title="Pick an image from camera roll" onPress={this.pickImage} />
+          {this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
+        </View>
       </SafeAreaView>
     );
   }

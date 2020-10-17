@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ReceiptWindow from "./components/ReceiptWindow.js"
+import UploadTest from "./components/UploadTest.js"
 import ReceiptManager from "./components/ReceiptManager.js"
 
 
