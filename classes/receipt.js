@@ -19,6 +19,10 @@ class Receipt {
     return newReceipt;
   }
 
+  getItems() {
+    return this.itemList;
+  }
+
 
   getItemCount() {
     return this.itemList.length;

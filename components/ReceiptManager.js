@@ -94,7 +94,7 @@ class ReceiptManager extends Component {
         <TouchableOpacity
           style={styles.editBtn}
           onPress={() => this.props.navigation.navigate("Receipt Editor", {
-            receiptId: receipt.getId()
+            receipt: receipt
           })}>
           <Text>Edit</Text>
         </TouchableOpacity>
