@@ -1,24 +1,35 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import Item from "./item.js"
 
 class Receipt {
 
   constructor(date, storeName, id) {
     this.storeName = storeName;
     this.date = date,
-    this.itemList = []
+    this.itemList = {}
     this.id = id
+    this.lastId = 0;
   }
 
   static fromJSONString(objectString) {
     var obj = JSON.parse(objectString)
     var newReceipt = new Receipt(obj.date, obj.storeName, obj.id)
-    newReceipt.itemList = obj.itemList
+
+
+    for(var item of Object.values(obj.itemList)) {
+      newReceipt.addItem(new Item(item.quantity, item.name, item.pricePerUnit, item.id))
+    }
+
     return newReceipt;
   }
 
   static fromObject(obj) {
     var newReceipt = new Receipt(obj.date, obj.storeName)
-    newReceipt.itemList = obj.itemList
+
+    for(var item of Object.values(obj.itemList)) {
+      newReceipt.addItem(new Item(item.quantity, item.name, item.pricePerUnit, item.id))
+    }
+
     return newReceipt;
   }
 
@@ -54,13 +65,29 @@ class Receipt {
     }
   }
 
+  addNewItem(quantity, name, price) {
+    var item = new Item(quantity, name, price, this.lastId)
+    this.lastId++
+    this.itemList[item.id] = item
+  }
+
+  addItem(item) {
+    this.itemList[item.id] = item
+  }
+
+  deleteItem(item) {
+    delete this.itemList[item.id];
+  }
 
   getItems() {
     return this.itemList;
   }
 
   getItemCount() {
-    return this.itemList.length;
+    if(this.itemList != null)
+      return Object.values(this.itemList).length;
+    else
+      return 0;
   }
 
   getStoreName() {
@@ -72,7 +99,7 @@ class Receipt {
   }
 
   getId() {
-    return this.storeName + " " + this.date;
+    return this.id;
   }
 
   JSONStringify() {

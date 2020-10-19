@@ -3,8 +3,7 @@ import { StyleSheet, View, FlatList, Text, Dimensions } from 'react-native';
 
 
 class DataTable extends Component {
-  //const [value, onChangeText] = React.useState('');
-
+  
   render() {
     return (
       <View style={styles.container}>

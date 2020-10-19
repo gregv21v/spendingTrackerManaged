@@ -11,7 +11,6 @@ import * as ImagePicker from 'expo-image-picker';
 
 class ReceiptManager extends Component {
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,8 +23,6 @@ class ReceiptManager extends Component {
 
     this.addReceiptOnPress = this.addReceiptOnPress.bind(this)
     //this.pickImage = this.pickImage.bind(this)
-
-
   }
 
   componentWillMount() {
@@ -42,7 +39,7 @@ class ReceiptManager extends Component {
 
 
   receiptListToRows(receiptList) {
-    console.log(receiptList);
+    //console.log(receiptList.receipts[0].getItemCount());
     if(receiptList.receipts !== undefined) {
       var rows = Object.values(receiptList.receipts).map(
         receipt =>
@@ -59,7 +56,7 @@ class ReceiptManager extends Component {
   // the action buttons for the table of receipts
   actionButtons(receipt) {
     return (
-      <View style={styles.actions}>
+      <SafeAreaView style={styles.actions}>
         <TouchableOpacity
           style={styles.editBtn}
           onPress={() => this.props.navigation.navigate("Receipt Editor", {
@@ -72,7 +69,7 @@ class ReceiptManager extends Component {
           onPress={() => this.deleteReceipt(receipt)}>
           <Text>-</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     )
   }
 
@@ -80,7 +77,6 @@ class ReceiptManager extends Component {
     Deletes a receipt from the
   */
   async deleteReceipt(receipt) {
-    // do nothing for now
     var receiptList = this.state.receipts
     receiptList.remove(receipt)
       .then(
@@ -176,7 +172,7 @@ class ReceiptManager extends Component {
           title="Receipts"
           headers={["Date", "Store", "Item Count", "Actions"]}
           rows={this.state.rows} />
-          <View style={styles.newReceiptFields}>
+          <SafeAreaView style={styles.newReceiptFields}>
             <TextInput
               style={styles.field}
               onChangeText={text => this.setState({ dateFieldValue: text })}
@@ -192,7 +188,7 @@ class ReceiptManager extends Component {
               onPress={this.addReceiptOnPress} >
               <Text>Add Receipt</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Button title="Pick an image from camera roll" onPress={this.pickImage} />
           {this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
@@ -205,29 +201,38 @@ class ReceiptManager extends Component {
 const styles = StyleSheet.create({
   editBtn: {
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "green",
     fontWeight: "bold",
     color: "white",
     margin: 5,
-    padding: 10,
+    padding: 0,
+    height: 40,
+    width: 50,
     flex: .5
   },
   deleteBtn: {
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "red",
     fontWeight: "bold",
     color: "white",
     margin: 5,
-    padding: 10,
+    padding: 0,
+    height: 40,
+    width: 50,
     flex: .5
   },
   addReceiptBtn: {
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "blue",
     fontWeight: "bold",
     color: "white",
+    height: 40,
+    width: 100,
     margin: 5,
-    padding: 10
+    padding: 0
   },
   actions: {
     flexDirection: "row",
@@ -236,12 +241,13 @@ const styles = StyleSheet.create({
   newReceiptFields: {
     flex: 1,
     flexDirection: "row",
-    margin: 40,
+    margin: 0,
     justifyContent: "center"
   },
   field: {
     flex: .3,
     height: 40,
+    width: 100,
     borderColor: "grey",
     borderWidth: 1
   }
