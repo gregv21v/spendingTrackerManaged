@@ -3,7 +3,14 @@ import { StyleSheet, View, FlatList, ScrollView,
   Text, Dimensions } from 'react-native';
 
 
-class DataTable extends Component {
+class DataTable2 extends Component {
+
+  renderRow() {
+    <View style={styles.row}>
+    
+    </View>
+  }
+
 
   render() {
     return (
@@ -73,18 +80,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 20
   },
-  container: {
-    margin: 40,
-    alignItems: "center"
+  row: {
+    flex: 1,
+    flexDirection: "row"
   },
-  header: {
-    borderBottomWidth: 2,
-  },
-  rowWhite: {
-    backgroundColor: "white"
-  },
-  rowGrey: {
-    backgroundColor: "grey"
+  cell: {
+
   }
 })
 
