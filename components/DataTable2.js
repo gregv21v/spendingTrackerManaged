@@ -5,69 +5,67 @@ import { StyleSheet, View, FlatList, ScrollView,
 
 class DataTable2 extends Component {
 
-  renderRow() {
-    <View style={styles.row}>
-    
-    </View>
+  constructor(props) {
+    super(props)
+    /*
+      Props variables:
+        rows as number
+        columns as number
+        data as array of arrays
+        headers as array
+
+     Data should be stored in an array of arrays
+    */
+    this.renderRow = this.renderRow.bind(this)
+    this.cellStyle = this.cellStyle.bind(this)
+    this.renderHeaders = this.renderHeaders.bind(this)
   }
+
+  cellStyle(columns) {
+    return {
+      flex: 1/columns
+    }
+  }
+
+
+
+  renderRow(row, index) {
+    return (
+      <View key={index} style={styles.row}>
+        {
+          row.map((cell, i) => {
+            return (
+              <View
+                key={i}
+                style={[this.cellStyle(row.length), styles.cell]}>
+                <Text>{cell}</Text>
+              </View>
+            )
+          })
+        }
+      </View>
+    )
+  }
+
+  renderHeaders() {
+    return this.renderRow(this.props.headers, 0)
+  }
+
+
+
 
 
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{this.props.title}</Text>
-        <View style={styles.rows}>
-           <FlatList
-             data={this.props.rows}
-             ListHeaderComponent={
-               () => (
-                 <View style={styles.header}>
-                  <FlatList
-                    data={this.props.headers} // headers is a list of names
-                    numColumns={this.props.headers.length}
-                    renderItem={
-                      ({item}) => (
-                        <Text style={
-                          {
-                            justifyContent: "center",
-                            alignItems: "center",
-                            fontWeight: "bold",
-                            marginLeft: 5,
-                            marginRight: 5,
-                            flex: 1/this.props.headers.length
-                          }
-                        }>
-                          {item}
-                        </Text>
-                      )
-                    }/>
-                 </View>
-               )
-             }
-             renderItem={
-               ({item, index}) => (
-                 <View style={ index % 2 === 0 ? styles.rowGrey : styles.rowWhite }>
-                   <FlatList
-                    data={Object.values(item)}
-                    numColumns={Object.values(item).length}
-                    renderItem={
-                      ({item}) => (
-                        <Text style={
-                          {
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginLeft: 5,
-                            marginRight: 5,
-                            flex: 1/this.props.headers.length
-                          }
-                        }>
-                          {item}
-                        </Text>
-                      )
-                    } />
-                 </View>
-                )
-             }/>
+        <View style={styles.table}>
+          {this.renderHeaders()}
+          {
+            this.props.data.map((row, index) => {
+              return this.renderRow(row, index)
+            })
+          }
         </View>
        </View>
     );
@@ -85,8 +83,9 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   cell: {
-
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
-export default DataTable;
+export default DataTable2;

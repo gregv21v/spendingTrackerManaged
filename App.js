@@ -17,11 +17,11 @@ import * as Sentry from 'sentry-expo';
 
 //import * as firebase from 'firebase';
 
-Sentry.init({
+/*Sentry.init({
   dsn: 'https://fb1dc871450c4f9a85831b1d1da9e80b@o463964.ingest.sentry.io/5469670',
   enableInExpoDevelopment: true,
   debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
-});
+});*/
 
 // Access any @sentry/react-native exports via:
 //Sentry.Native.*

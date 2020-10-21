@@ -3,7 +3,7 @@ import { AppRegistry, Button, SafeAreaView,
   Image, Platform,
   StyleSheet, View, Text, TextInput } from 'react-native';
 
-import DataTable from "./DataTable.js";
+import DataTable2 from "./DataTable2.js";
 import CustomButton from "./CustomButton.js";
 import Receipt from "../classes/receipt.js";
 import ReceiptList from "../classes/receiptList.js"
@@ -58,25 +58,7 @@ class ReceiptManager extends Component {
   }
 
 
-  // the action buttons for the table of receipts
-  actionButtons(receipt) {
-    return (
-      <SafeAreaView style={styles.actions}>
-        <CustomButton
-          buttonStyle={styles.editBtn}
-          text="Edit"
-          onPress={() => this.props.navigation.navigate("Receipt Editor", {
-            receipt: receipt
-          })}>
-        </CustomButton>
-        <CustomButton
-          buttonStyle={styles.deleteBtn}
-          text="-"
-          onPress={() => this.deleteReceipt(receipt)}>
-        </CustomButton>
-      </SafeAreaView>
-    )
-  }
+
 
   /*
     Deletes a receipt from the
@@ -188,13 +170,35 @@ class ReceiptManager extends Component {
       })
   }
 
+  
+
+  // the action buttons for the table of receipts
+  actionButtons(receipt) {
+    return (
+      <SafeAreaView style={styles.actions}>
+        <CustomButton
+          buttonStyle={styles.editBtn}
+          text="Edit"
+          onPress={() => this.props.navigation.navigate("Receipt Editor", {
+            receipt: receipt
+          })}>
+        </CustomButton>
+        <CustomButton
+          buttonStyle={styles.deleteBtn}
+          text="-"
+          onPress={() => this.deleteReceipt(receipt)}>
+        </CustomButton>
+      </SafeAreaView>
+    )
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <DataTable
+        <DataTable2
           title="Receipts"
           headers={["Date", "Store", "Item Count", "Actions"]}
-          rows={this.state.rows} />
+          data={this.state.rows} />
           <SafeAreaView style={styles.newReceiptFields}>
             <TextInput
               style={styles.field}
