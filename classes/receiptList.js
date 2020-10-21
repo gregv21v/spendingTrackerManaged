@@ -38,6 +38,7 @@ class ReceiptList {
       await AsyncStorage.setItem("@receiptIds", JSON.stringify(this.getIds()))
 
     } catch(e) {
+      throw new Error(e)
       console.log(e);
     }
 
@@ -68,7 +69,7 @@ class ReceiptList {
     try {
       var jsonString = JSON.stringify(this.getIds())
       await AsyncStorage.setItem("@receiptIds", jsonString)
-      await AsyncStorage.setItem("@receiptLastId", this.lastId)
+      await AsyncStorage.setItem("@receiptLastId", JSON.stringify(this.lastId))
 
 
       // save each individual receipt
@@ -76,6 +77,7 @@ class ReceiptList {
         await receipt.save();
       }
     } catch (e) {
+      throw new Error(e)
       console.log(e);
     }
   }
@@ -109,6 +111,7 @@ class ReceiptList {
       }
     } catch(e) {
       // error reading value
+      throw new Error(e)
       console.log(e);
     }
   }

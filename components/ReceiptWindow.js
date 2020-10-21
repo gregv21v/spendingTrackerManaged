@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity,
+import { StyleSheet, View,
   FlatList, Text, TextInput } from 'react-native';
+
+
 import DataTable from "./DataTable.js";
+import CustomButton from "./CustomButton.js"
 import Item from "../classes/item.js"
 
 
@@ -85,16 +88,16 @@ class ReceiptWindow extends Component {
   actionButtons(item) {
     return (
       <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.editBtn}
+        <CustomButton
+          buttonStyle={styles.editBtn}
+          text="Edit"
           onPress={() => this.editBtnOnPress(item)}>
-          <Text>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deleteBtn}
+        </CustomButton>
+        <CustomButton
+          buttonStyle={styles.deleteBtn}
+          text="-"
           onPress={() => this.deleteBtnOnPress(item)}>
-          <Text>-</Text>
-        </TouchableOpacity>
+        </CustomButton>
       </View>
     )
   }
@@ -124,11 +127,11 @@ class ReceiptWindow extends Component {
             onChangeText={text => this.setState({ pricePerUnitFieldValue: text })}
             value={this.state.pricePerUnitFieldValue}
           />
-          <TouchableOpacity
-            style={styles.addItemBtn}
+          <CustomButton
+            buttonStyle={styles.addItemBtn}
+            text="Add Item"
             onPress={this.addItemOnPress} >
-            <Text>Add Item</Text>
-          </TouchableOpacity>
+          </CustomButton>
           </View>
       </View>
 
@@ -139,42 +142,24 @@ class ReceiptWindow extends Component {
 
 const styles = StyleSheet.create({
   editBtn: {
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "green",
-    fontWeight: "bold",
-    color: "white",
-    margin: 5,
-    padding: 0,
-    height: 40,
-    width: 50,
     flex: .5
   },
   deleteBtn: {
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "red",
-    fontWeight: "bold",
-    color: "white",
-    margin: 5,
-    padding: 0,
-    height: 40,
-    width: 50,
     flex: .5
   },
   addItemBtn: {
-    alignItems: "center",
     backgroundColor: "blue",
-    fontWeight: "bold",
-    color: "white",
     margin: 5,
-    padding: 10
+    flex: .2
   },
   fields: {
     flex: 1,
     flexDirection: "row",
-    margin: 40,
-    justifyContent: "center"
+    margin: 5,
+    justifyContent: "center",
+    alignItems: "center"
   },
   field: {
     flex: .3,

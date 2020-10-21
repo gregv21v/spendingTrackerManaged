@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { AppRegistry, TouchableOpacity, Button, SafeAreaView,
-  Image,
+import { AppRegistry, Button, SafeAreaView,
+  Image, Platform,
   StyleSheet, View, Text, TextInput } from 'react-native';
 
 import DataTable from "./DataTable.js";
+import CustomButton from "./CustomButton.js";
 import Receipt from "../classes/receipt.js";
 import ReceiptList from "../classes/receiptList.js"
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
+
+import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
+
 
 
 class ReceiptManager extends Component {
@@ -22,7 +27,7 @@ class ReceiptManager extends Component {
     }
 
     this.addReceiptOnPress = this.addReceiptOnPress.bind(this)
-    //this.pickImage = this.pickImage.bind(this)
+    this.pickImage = this.pickImage.bind(this)
   }
 
   componentWillMount() {
@@ -57,18 +62,18 @@ class ReceiptManager extends Component {
   actionButtons(receipt) {
     return (
       <SafeAreaView style={styles.actions}>
-        <TouchableOpacity
-          style={styles.editBtn}
+        <CustomButton
+          buttonStyle={styles.editBtn}
+          text="Edit"
           onPress={() => this.props.navigation.navigate("Receipt Editor", {
             receipt: receipt
           })}>
-          <Text>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deleteBtn}
+        </CustomButton>
+        <CustomButton
+          buttonStyle={styles.deleteBtn}
+          text="-"
           onPress={() => this.deleteReceipt(receipt)}>
-          <Text>-</Text>
-        </TouchableOpacity>
+        </CustomButton>
       </SafeAreaView>
     )
   }
@@ -91,7 +96,8 @@ class ReceiptManager extends Component {
       )
   }
 
-  /*async pickImage() {
+
+  async pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -99,21 +105,20 @@ class ReceiptManager extends Component {
       quality: 1,
     });
 
-    console.log(result);
 
-    // upload to server
-    let uriParts = result.uri.split('.');
-    let fileType = uriParts[uriParts.length - 1];
 
-    let formData = new FormData();
-    formData.append('image', {
-      uri: result.uri,
-      name: `photo.${fileType}`,
-      type: `image/${fileType}`,
-    });
 
-    console.log(JSON.stringify(formData));
 
+    if (!result.cancelled) {
+      this.setState({
+        image: result.uri
+      });
+    }
+
+  }
+
+  /*
+  pickImage() {
     // Tests I've tried:
 
       1. remove the s from headers
@@ -124,27 +129,45 @@ class ReceiptManager extends Component {
 
 
 
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    }).then(result => {
+      let options = {
+        method: 'POST',
+        body: formData,
+        header: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+        },
+      };
 
+      // upload to server
+      let uriParts = result.uri.split('.');
+      let fileType = uriParts[uriParts.length - 1];
 
-    let options = {
-      method: 'POST',
-      body: formData,
-      header: {
-        'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data'
-      },
-    };
-
-    if (!result.cancelled) {
-      this.setState({
-        image: result.uri
+      let formData = new FormData();
+      formData.append('image', {
+        uri: result.uri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
       });
-    }
 
-    fetch("http://localhost:8080/upload_receipt_img", options)
-      .then(result => console.log(result))
+      console.log(JSON.stringify(formData));
 
-  };*/
+      if (!result.cancelled) {
+        this.setState({
+          image: result.uri
+        });
+      }
+
+      fetch("http://localhost:8080/upload_receipt_img", options)
+        .then(result => console.log(result))
+    })
+  };
+  */
 
   addReceiptOnPress() {
     // add new receipt to list of receipts
@@ -167,7 +190,7 @@ class ReceiptManager extends Component {
 
   render() {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <DataTable
           title="Receipts"
           headers={["Date", "Store", "Item Count", "Actions"]}
@@ -183,56 +206,70 @@ class ReceiptManager extends Component {
               onChangeText={text => this.setState({ storeNameFieldValue: text })}
               value={this.state.storeNameFieldValue}
             />
-            <TouchableOpacity
-              style={styles.addReceiptBtn}
+            <CustomButton
+              buttonStyle={styles.addReceiptBtn}
+              text="Add Receipt"
               onPress={this.addReceiptOnPress} >
-              <Text>Add Receipt</Text>
-            </TouchableOpacity>
+            </CustomButton>
         </SafeAreaView>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Button title="Pick an image from camera roll" onPress={this.pickImage} />
-          {this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />}
-        </View>
+        <CustomButton
+          buttonStyle={styles.pickImageBtn}
+          text="Pick an image from camera roll"
+          onPress={this.pickImage}>
+        </CustomButton>
+        {this.state.image && <Image source={{ uri: this.state.image }} style={styles.image} />}
       </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  editBtn: {
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1
+  },
+  pickImageView: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "green",
+    flex: 1
+  },
+  image: {
+    width: 200,
+    height: 200,
+    justifyContent: "center"
+  },
+  pickImageBtn: {
+    flex: .3,
+    width: 300,
+    height: 60,
+    padding: 10,
+    backgroundColor: "blue"
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
     fontWeight: "bold",
-    color: "white",
     margin: 5,
     padding: 0,
     height: 40,
     width: 50,
+    borderRadius: 3,
     flex: .5
+  },
+  btnText: {
+    color: "white"
+  },
+  editBtn: {
+    backgroundColor: "green"
   },
   deleteBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "red",
-    fontWeight: "bold",
-    color: "white",
-    margin: 5,
-    padding: 0,
-    height: 40,
-    width: 50,
-    flex: .5
+    backgroundColor: "red"
   },
   addReceiptBtn: {
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "blue",
-    fontWeight: "bold",
-    color: "white",
-    height: 40,
     width: 100,
-    margin: 5,
-    padding: 0
+    flex: .3
   },
   actions: {
     flexDirection: "row",
@@ -246,6 +283,7 @@ const styles = StyleSheet.create({
   },
   field: {
     flex: .3,
+    margin: 5,
     height: 40,
     width: 100,
     borderColor: "grey",
