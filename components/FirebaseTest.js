@@ -9,6 +9,7 @@ class FirebaseTest extends Component {
   }
 
 
+  
   render() {
     return (
       <View style={{justifyContent: "center", alignItems: "center"}}>

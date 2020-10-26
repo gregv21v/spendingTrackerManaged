@@ -2,17 +2,23 @@ import React, { Component } from 'react';
 import {TextInput, Text, StyleSheet} from 'react-native'
 
 
+/*
+  A field that you can change the editability of
+*/
 class EditableField extends Component {
   constructor(props) {
     super(props)
 
-    this.createEditableComponent = this.createEditableComponent.bind(this)
-    this.createUneditableComponent = this.createUneditableComponent.bind(this)
+    this.renderEditableComponent = this.renderEditableComponent.bind(this)
+    this.renderUneditableComponent = this.renderUneditableComponent.bind(this)
   }
 
 
-
-  createEditableComponent() {
+  /*
+    renderEditableComponent()
+    Description: renders the version of this component that is editable.
+  */
+  renderEditableComponent() {
     return (
       <TextInput
         style={[styles.field, this.props.style]}
@@ -22,7 +28,13 @@ class EditableField extends Component {
     )
   }
 
-  createUneditableComponent() {
+
+
+  /*
+    renderUneditableComponent()
+    Description: renders the version of this component that is uneditable.
+  */
+  renderUneditableComponent() {
     return (
       <Text style={[styles.field, this.props.style]}>
         {this.props.value}
@@ -30,11 +42,15 @@ class EditableField extends Component {
     )
   }
 
+  /*
+    render()
+    Description: renders the EditableField component.
+  */
   render() {
     if(this.props.isEditable) {
-      return this.createEditableComponent()
+      return this.renderEditableComponent()
     } else {
-      return this.createUneditableComponent()
+      return this.renderUneditableComponent()
     }
   }
 }

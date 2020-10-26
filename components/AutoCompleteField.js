@@ -4,7 +4,13 @@ import {TextInput, View, FlatList,
 
 
 
+/*
+  A component that shows suggestions for automatically
+  completing the word you are typing
 
+  TODO: automatically allow autocomplete options
+    to be added to the dictionary
+*/
 class AutoCompleteField extends Component {
 
   /*
@@ -20,13 +26,18 @@ class AutoCompleteField extends Component {
     super(props)
 
     this.state = {
-      currentSuggestions: [],
+      currentSuggestions: [], // the current matching suggestions
     }
 
     this.onSubmitEditing = this.onSubmitEditing.bind(this);
 
   }
 
+  /*
+    handleSelect()
+    Description: handles selection from the autocomplete menu
+    @param index - the index of the selected suggestion
+  */
   handleSelect(index) {
     this.props.handleChange(this.state.currentSuggestions[index])
 
@@ -35,6 +46,12 @@ class AutoCompleteField extends Component {
     })
   }
 
+  /*
+    onChangeText()
+    Description: updates the list of selection dropdown
+    @param text - the new text of the autocomplete field
+
+  */
   onChangeText(text) {
     var currentSuggestions = [];
 
@@ -58,6 +75,12 @@ class AutoCompleteField extends Component {
     })
   }
 
+  /*
+    onSubmitEditing()
+    @param event - the event triggered when the AutoCompleteField is submitted
+    Description: automatically completes the word with the first suggestion
+      when you press enter.
+  */
   onSubmitEditing(event) {
     console.log(event);
     if(event.key === "Enter") {
@@ -69,6 +92,10 @@ class AutoCompleteField extends Component {
   }
 
 
+  /*
+    render()
+    Renders the autocomplete field
+  */
   render() {
     return (
       <View style={[this.props.style, styles.main]}>

@@ -3,6 +3,9 @@ import { StyleSheet, View, FlatList, ScrollView,
   Text, Dimensions } from 'react-native';
 
 
+/*
+  A table for displaying data
+*/
 class DataTable extends Component {
 
   constructor(props) {
@@ -21,6 +24,14 @@ class DataTable extends Component {
     this.renderHeader = this.renderHeader.bind(this)
   }
 
+  /*
+    cellFlex()
+    @param columns - the number of columns in the cell's row
+    @param index - the index of the cell in the row
+
+    Description: determines the flex value of a given cell
+
+  */
   cellFlex(columns, index) {
     return {
       flex: 1/columns
@@ -29,6 +40,13 @@ class DataTable extends Component {
 
 
 
+  /*
+    renderRow()
+    @param row - the data for the given row
+    @param index - the index of the given row
+
+    Description: renders a given row.
+  */
   renderRow(row, index) {
     return (
       <View key={index} style={styles.row}>
@@ -47,6 +65,10 @@ class DataTable extends Component {
     )
   }
 
+  /*
+    renderHeader()
+    Description: renders the tables headers
+  */
   renderHeader() {
     return (
       <View key={0} style={styles.header}>
@@ -65,10 +87,10 @@ class DataTable extends Component {
     )
   }
 
-
-
-
-
+  /*
+    render()
+    Description: renders the DataTable
+  */
   render() {
     return (
       <View style={styles.container}>

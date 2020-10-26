@@ -6,7 +6,11 @@ import EditableField from "./EditableField.js"
 
 class EditableFieldWithAutoComplete extends EditableField {
 
-  createEditableComponent() {
+  /*
+    renderEditableComponent()
+    Description: renders the version of this component that is editable.
+  */
+  renderEditableComponent() {
     return (
       <AutoCompleteField
         style={this.props.style}

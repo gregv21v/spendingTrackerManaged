@@ -13,6 +13,7 @@ import EditableFieldWithAutoComplete from "./EditableFieldWithAutoComplete.js"
 class ReceiptItemsTable extends DataTable {
 
   /*
+    constructor()
     Props:
       receipt
   */
@@ -20,7 +21,10 @@ class ReceiptItemsTable extends DataTable {
     super(props)
 
     this.state = {
+      // the id of the item that is currently being edited
       currentlyEditingId: -1,
+
+      // words that can be used in autofilling fields
       wordSuggestions: [
         "leeks",
         "legumes",
@@ -28,6 +32,8 @@ class ReceiptItemsTable extends DataTable {
         "lemons",
         "lentils"
       ],
+
+      // numbers that can be used in autofilling fields
       numberSuggestions: [
         0,
         1,
@@ -41,8 +47,11 @@ class ReceiptItemsTable extends DataTable {
     this.isCurrentlyEdited = this.isCurrentlyEdited.bind(this)
   }
 
-  // determines the color of the row
-  // based upon it's index
+  /*
+    rowColor()
+    @param index - the index of the row being styled
+    Description: determines the color of the row based upon it's index
+  */
   rowColor(index) {
     if(index % 2 == 0) {
       return {
@@ -55,6 +64,13 @@ class ReceiptItemsTable extends DataTable {
     }
   }
 
+  /*
+    rowColor()
+    @param rowLength - the length of the row being styled
+    @param index - the index of the row being styled
+    Description: determines flex property of a row
+
+  */
   cellFlex(rowLength, index) {
     if(index == rowLength-1) {
       return {
@@ -127,6 +143,7 @@ class ReceiptItemsTable extends DataTable {
         </View>
       </View>
     )
+
   }
 
   renderHeader() {

@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native'
 
 
+
+/*
+  My own custom button
+*/
 class CustomButton extends Component {
   /*
+    constructor()
+    @param props - the props of this component
+
     Props:
       onPress: determines what happens when the button
         is pressed
@@ -11,11 +18,14 @@ class CustomButton extends Component {
       textStyle: the style attribute of the text of the
         button
   */
-
   constructor(props) {
     super(props)
   }
 
+  /*
+    render()
+    Description: Renders the CustomButton
+  */
   render() {
     return (
       <TouchableOpacity
