@@ -33,6 +33,8 @@ class Receipt {
     return newReceipt;
   }
 
+  
+
 
   // load the receipt from local storage
   // according to its id

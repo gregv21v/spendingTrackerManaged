@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { AppRegistry, Button, SafeAreaView,
-  Image, Platform,
+  Image, Platform, Dimensions,
   StyleSheet, View, Text, TextInput } from 'react-native';
 
-import DataTable2 from "./DataTable2.js";
+import ReceiptsTable from "./ReceiptsTable.js";
 import CustomButton from "./CustomButton.js";
 import Receipt from "../classes/receipt.js";
 import ReceiptList from "../classes/receiptList.js"
@@ -87,10 +87,6 @@ class ReceiptManager extends Component {
       quality: 1,
     });
 
-
-
-
-
     if (!result.cancelled) {
       this.setState({
         image: result.uri
@@ -170,7 +166,13 @@ class ReceiptManager extends Component {
       })
   }
 
-  
+
+  exportReceipt(receipt) {
+    FileSystem.writeAsStringAsync(
+      FileSystem.documentDirectory + "receipt" + receipt.id + ".json",
+      JSON.stringify(receipt)
+    )
+  }
 
   // the action buttons for the table of receipts
   actionButtons(receipt) {
@@ -184,6 +186,10 @@ class ReceiptManager extends Component {
           })}>
         </CustomButton>
         <CustomButton
+          buttonStyle={styles.exportBtn}
+          text="Export"
+          onPress={() => this.exportReceipt(receipt)} />
+        <CustomButton
           buttonStyle={styles.deleteBtn}
           text="-"
           onPress={() => this.deleteReceipt(receipt)}>
@@ -195,11 +201,12 @@ class ReceiptManager extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <DataTable2
-          title="Receipts"
-          headers={["Date", "Store", "Item Count", "Actions"]}
-          data={this.state.rows} />
-          <SafeAreaView style={styles.newReceiptFields}>
+
+          <ReceiptsTable
+            title="Receipts"
+            headers={["Date", "Store", "Item Count", "Actions"]}
+            data={this.state.rows} />
+          <View style={styles.newReceiptFields}>
             <TextInput
               style={styles.field}
               onChangeText={text => this.setState({ dateFieldValue: text })}
@@ -215,13 +222,15 @@ class ReceiptManager extends Component {
               text="Add Receipt"
               onPress={this.addReceiptOnPress} >
             </CustomButton>
-        </SafeAreaView>
-        <CustomButton
-          buttonStyle={styles.pickImageBtn}
-          text="Pick an image from camera roll"
-          onPress={this.pickImage}>
-        </CustomButton>
-        {this.state.image && <Image source={{ uri: this.state.image }} style={styles.image} />}
+        </View>
+        <View style={{flex: .1}}>
+          <CustomButton
+            buttonStyle={styles.pickImageBtn}
+            text="Pick an image from camera roll"
+            onPress={this.pickImage}>
+          </CustomButton>
+          {this.state.image && <Image source={{ uri: this.state.image }} style={styles.image} />}
+        </View>
       </SafeAreaView>
     );
   }
@@ -236,7 +245,9 @@ const styles = StyleSheet.create({
   pickImageView: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
+    width: Dimensions.get("window").width - 20,
+    height: 250
   },
   image: {
     width: 200,
@@ -245,9 +256,9 @@ const styles = StyleSheet.create({
   },
   pickImageBtn: {
     flex: .3,
-    width: 300,
+    width: Dimensions.get("window").width - 20,
     height: 60,
-    padding: 10,
+    padding: 20,
     backgroundColor: "blue"
   },
   button: {
@@ -265,10 +276,16 @@ const styles = StyleSheet.create({
     color: "white"
   },
   editBtn: {
-    backgroundColor: "green"
+    backgroundColor: "green",
+    flex: 0.3
   },
   deleteBtn: {
-    backgroundColor: "red"
+    backgroundColor: "red",
+    flex: 0.3
+  },
+  exportBtn: {
+    backgroundColor: "orange",
+    flex: 0.3
   },
   addReceiptBtn: {
     backgroundColor: "blue",
@@ -277,13 +294,15 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    flex: 1
+    flex: 1,
+    paddingRight: 20
   },
   newReceiptFields: {
-    flex: 1,
+    flex: .1,
     flexDirection: "row",
     margin: 0,
-    justifyContent: "center"
+    justifyContent: "center",
+    width: Dimensions.get("window").width - 20
   },
   field: {
     flex: .3,

@@ -3,6 +3,15 @@ import {TouchableOpacity, Text, StyleSheet} from 'react-native'
 
 
 class CustomButton extends Component {
+  /*
+    Props:
+      onPress: determines what happens when the button
+        is pressed
+      buttonStyle: the style attribute of the button itself
+      textStyle: the style attribute of the text of the
+        button
+  */
+
   constructor(props) {
     super(props)
   }

@@ -12,6 +12,7 @@
        }
      ]
     },
+    "description" : "An app for managing your receipts.",
     "name": "spendingTrackerManaged",
     "slug": "spendingTrackerManaged",
     "version": "1.0.0",

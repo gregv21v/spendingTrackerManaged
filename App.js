@@ -12,16 +12,17 @@ import UploadTest from "./components/UploadTest.js"
 import ReceiptManager from "./components/ReceiptManager.js"
 import FirebaseTest from "./components/FirebaseTest.js"
 import IPhoneTest from "./components/IPhoneTest.js"
+import TestComponent from "./components/TestComponent.js"
 
 import * as Sentry from 'sentry-expo';
 
 //import * as firebase from 'firebase';
 
-/*Sentry.init({
+Sentry.init({
   dsn: 'https://fb1dc871450c4f9a85831b1d1da9e80b@o463964.ingest.sentry.io/5469670',
   enableInExpoDevelopment: true,
   debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
-});*/
+});
 
 // Access any @sentry/react-native exports via:
 //Sentry.Native.*
@@ -49,6 +50,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
         <Stack.Screen
           name="Receipt Manager"
           component={ReceiptManager}
@@ -68,6 +70,11 @@ export default function App() {
           name="IPhone Test"
           component={IPhoneTest}
           options={{title: "IPhone Test"}}
+        />
+        <Stack.Screen
+          name="Test Component"
+          component={TestComponent}
+          options={{title: "Test Component"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -25,6 +25,29 @@ class ReceiptList {
     this.receipts[receipt.id] = receipt;
   }
 
+
+
+
+  toArray(actionButtons) {
+    return Object.values(this.receipts).map(
+      (receipt) => [
+        receipt.getDate(),
+        receipt.getStoreName(),
+        receipt.getItemCount()
+      ]
+    )
+  }
+
+  editItem(item) {
+    for (var i = 0; i < array.length; i++) {
+      array[i]
+    }
+  }
+
+  getIds() {
+    return Object.keys(this.receipts)
+  }
+
   // removes the item from
   // memory and local storage
   async remove(receipt) {
@@ -43,24 +66,6 @@ class ReceiptList {
     }
 
   }
-
-
-  toArray(actionButtons) {
-    return Object.values(this.receipts).map(
-      (receipt) => [
-        receipt.getDate(),
-        receipt.getStoreName(),
-        receipt.getItemCount()
-      ]
-    )
-  }
-
-  getIds() {
-    return Object.keys(this.receipts)
-  }
-
-  // remove receipt
-
 
   // save receipt array to local storage
   async save() {

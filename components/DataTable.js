@@ -5,62 +5,81 @@ import { StyleSheet, View, FlatList, ScrollView,
 
 class DataTable extends Component {
 
+  constructor(props) {
+    super(props)
+    /*
+      Props variables:
+        rows as number
+        columns as number
+        data as array of arrays
+        headers as array
+
+     Data should be stored in an array of arrays
+    */
+    this.renderRow = this.renderRow.bind(this)
+    this.cellFlex = this.cellFlex.bind(this)
+    this.renderHeader = this.renderHeader.bind(this)
+  }
+
+  cellFlex(columns, index) {
+    return {
+      flex: 1/columns
+    }
+  }
+
+
+
+  renderRow(row, index) {
+    return (
+      <View key={index} style={styles.row}>
+        {
+          row.map((cell, i) => {
+            return (
+              <View
+                key={i}
+                style={[this.cellFlex(row.length, i), styles.cell]}>
+                <Text>{cell}</Text>
+              </View>
+            )
+          })
+        }
+      </View>
+    )
+  }
+
+  renderHeader() {
+    return (
+      <View key={0} style={styles.header}>
+        {
+          this.props.headers.map((cell, i) => {
+            return (
+              <View
+                key={i}
+                style={[this.cellFlex(this.props.headers.length, i), styles.cell]}>
+                <Text style={styles.headerText}>{cell}</Text>
+              </View>
+            )
+          })
+        }
+      </View>
+    )
+  }
+
+
+
+
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{this.props.title}</Text>
-        <View style={styles.rows}>
-           <FlatList
-             data={this.props.rows}
-             ListHeaderComponent={
-               () => (
-                 <View style={styles.header}>
-                  <FlatList
-                    data={this.props.headers} // headers is a list of names
-                    numColumns={this.props.headers.length}
-                    renderItem={
-                      ({item}) => (
-                        <Text style={
-                          {
-                            justifyContent: "center",
-                            alignItems: "center",
-                            fontWeight: "bold",
-                            marginLeft: 5,
-                            marginRight: 5,
-                            flex: 1/this.props.headers.length
-                          }
-                        }>
-                          {item}
-                        </Text>
-                      )
-                    }/>
-                 </View>
-               )
-             }
-             renderItem={
-               ({item, index}) => (
-                 <View style={ index % 2 === 0 ? styles.rowGrey : styles.rowWhite }>
-                   <FlatList
-                    data={Object.values(item)}
-                    numColumns={Object.values(item).length}
-                    renderItem={
-                      ({item}) => (
-                        <Text style={
-                          {
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginLeft: 5,
-                            marginRight: 5,
-                            flex: 1/this.props.headers.length
-                          }
-                        }>
-                          {item}
-                        </Text>
-                      )
-                    } />
-                 </View>
-                )
-             }/>
+        <View style={styles.table}>
+          {this.renderHeader()}
+          {
+            this.props.data.map((row, index) => {
+              return this.props.renderRow(row, index)
+            })
+          }
         </View>
        </View>
     );
@@ -68,23 +87,30 @@ class DataTable extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    paddingBottom: 20
+    paddingBottom: 20,
   },
-  container: {
-    margin: 40,
-    alignItems: "center"
+  row: {
+    flex: 1,
+    flexDirection: "row"
   },
   header: {
     borderBottomWidth: 2,
+    flexDirection: "row"
   },
-  rowWhite: {
-    backgroundColor: "white"
+  headerText: {
+    color: "black",
+    fontWeight: "bold"
   },
-  rowGrey: {
-    backgroundColor: "grey"
+  cell: {
+    justifyContent: "center",
+    alignItems: "center"
   }
 })
 
