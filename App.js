@@ -13,6 +13,7 @@ import ReceiptManager from "./components/ReceiptManager.js"
 import FirebaseTest from "./components/FirebaseTest.js"
 import IPhoneTest from "./components/IPhoneTest.js"
 import TestComponent from "./components/TestComponent.js"
+import AppleStyleSwipeableRow from "./components/AppleStyleSwipeableRow.js"
 
 import * as Sentry from 'sentry-expo';
 
@@ -50,7 +51,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
+        <Stack.Screen
+          name="Test Component"
+          component={TestComponent}
+          options={{title: "Test Component"}}
+        />
         <Stack.Screen
           name="Receipt Manager"
           component={ReceiptManager}
@@ -70,11 +75,6 @@ export default function App() {
           name="IPhone Test"
           component={IPhoneTest}
           options={{title: "IPhone Test"}}
-        />
-        <Stack.Screen
-          name="Test Component"
-          component={TestComponent}
-          options={{title: "Test Component"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

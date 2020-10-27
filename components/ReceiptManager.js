@@ -10,10 +10,12 @@ import ReceiptList from "../classes/receiptList.js"
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
 
-import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
 
-
-
+/*
+  ReceiptManager
+  Description: A screen that manages all the receipts
+    a person has.
+*/
 class ReceiptManager extends Component {
 
   constructor(props) {
