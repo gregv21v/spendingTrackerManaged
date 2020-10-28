@@ -22,6 +22,7 @@ class DataTable extends Component {
     this.renderRow = this.renderRow.bind(this)
     this.cellFlex = this.cellFlex.bind(this)
     this.renderHeader = this.renderHeader.bind(this)
+    this.renderFinalRow = this.renderFinalRow.bind(this)
   }
 
   /*
@@ -87,6 +88,12 @@ class DataTable extends Component {
     )
   }
 
+  renderFinalRow() {
+    <View style={[styles.row]}>
+      <Text style={{fontSize: 40}}>+</Text>
+    </View>
+  }
+
   /*
     render()
     Description: renders the DataTable
@@ -94,7 +101,6 @@ class DataTable extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.props.title}</Text>
         <View style={styles.table}>
           {this.renderHeader()}
           {

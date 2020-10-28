@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Text, View, Dimensions,
-  StyleSheet, SafeAreaView, Picker } from 'react-native';
+  StyleSheet, SafeAreaView, Picker,
+  Platform } from 'react-native';
 
 import AutoCompleteField from "./AutoCompleteField.js"
 import CustomButton from "./CustomButton.js"
@@ -68,6 +69,36 @@ class TestComponent extends Component {
     })
   }
 
+  renderActions() {
+    if(Platform.OS == "web") {
+      return (
+        <RectButton style={styles.rectButton} onPress={() => alert("item.from")}>
+          <Text style={styles.fromText}>Test</Text>
+          <Text numberOfLines={2} style={styles.messageText}>
+            Test1
+          </Text>
+          <Text style={styles.dateText}>
+            Test2 {'❭'}
+          </Text>
+        </RectButton>
+      )
+    } else {
+      return (
+        <AppleStyleSwipeableRow>
+          <RectButton style={styles.rectButton} onPress={() => alert("item.from")}>
+            <Text style={styles.fromText}>Test</Text>
+            <Text numberOfLines={2} style={styles.messageText}>
+              Test1
+            </Text>
+            <Text style={styles.dateText}>
+              Test2 {'❭'}
+            </Text>
+          </RectButton>
+        </AppleStyleSwipeableRow>
+      )
+    }
+  }
+
   render() {
     return (
       <SafeAreaView style={{flex: 1, width: Dimensions.get("window").width}}>
@@ -96,17 +127,8 @@ class TestComponent extends Component {
               buttonStyle={{flex: .1, height: 30}}
               text="Add Entry to Suggestions"/>
           </View>
-          <AppleStyleSwipeableRow>
-            <RectButton style={styles.rectButton} onPress={() => alert("item.from")}>
-              <Text style={styles.fromText}>Test</Text>
-              <Text numberOfLines={2} style={styles.messageText}>
-                Test1
-              </Text>
-              <Text style={styles.dateText}>
-                Test2 {'❭'}
-              </Text>
-            </RectButton>
-          </AppleStyleSwipeableRow>
+          {this.renderActions()}
+
       </SafeAreaView>
     )
   }

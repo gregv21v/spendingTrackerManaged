@@ -5,26 +5,22 @@ import { RectButton } from 'react-native-gesture-handler';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-  export default class AppleStyleSwipeableRow extends Component {
-  renderLeftActions = (progress, dragX) => {
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
-    return (
-      <RectButton style={styles.leftAction} onPress={this.close}>
-        <Animated.Text
-          style={[
-            styles.actionText,
-            {
-              transform: [{ translateX: trans }],
-            },
-          ]}>
-          Archive
-        </Animated.Text>
-      </RectButton>
-    );
-  };
+
+/**
+  ReceiptSwipeableRow
+  adds the swipeable effect to a row in the table
+*/
+export default class ReceiptSwipeableRow extends Component {
+
+
+  /**
+    renderRightAction()
+    @param text the text of the button for this action
+    @param color the color of the button for this action
+    @param x the x location of this button when it is fully visible
+    @param progress ??
+    @description renders a right action for swiping right
+  */
   renderRightAction = (text, color, x, progress) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
@@ -44,26 +40,37 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
       </Animated.View>
     );
   };
+
+  /**
+    renderRightActions()
+    @param text the text of the button for this action
+    @param color the color of the button for this action
+    @param x the x location of this button when it is fully visible
+    @param progress ??
+    @description renders multiple right actions at once
+  */
   renderRightActions = progress => (
     <View style={{ width: 192, flexDirection: I18nManager.isRTL? 'row-reverse' : 'row' }}>
-      {this.renderRightAction('More', '#C8C7CD', 192, progress)}
-      {this.renderRightAction('Flag', '#ffab00', 128, progress)}
-      {this.renderRightAction('More', '#dd2c00', 64, progress)}
+      {this.renderRightAction('Remove', 'red', 128, progress)}
     </View>
   );
+
+
   updateRef = ref => {
     this._swipeableRow = ref;
   };
+
   close = () => {
     this._swipeableRow.close();
   };
+
+  
   render() {
-    const { children } = this.props;
+    const { children } = this.props; // child components of the swipeable
     return (
       <Swipeable
         ref={this.updateRef}
         friction={2}
-        leftThreshold={30}
         rightThreshold={40}
         renderRightActions={this.renderRightActions}>
         {children}

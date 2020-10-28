@@ -1,18 +1,18 @@
 {
   "expo": {
     "hooks": {
-     "postPublish": [
-       {
-         "file": "sentry-expo/upload-sourcemaps",
-         "config": {
-           "organization": "Greg Corp",
-           "project": "greg-corp",
-           "authToken": "b4cf46edd2a84940b9d377ebfa2f23b8aec57fff9b19493592001c1dccf094db"
-         }
-       }
-     ]
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Greg Corp",
+            "project": "greg-corp",
+            "authToken": "b4cf46edd2a84940b9d377ebfa2f23b8aec57fff9b19493592001c1dccf094db"
+          }
+        }
+      ]
     },
-    "description" : "An app for managing your receipts.",
+    "description": "An app for managing your receipts.",
     "name": "spendingTrackerManaged",
     "slug": "spendingTrackerManaged",
     "version": "1.0.0",
@@ -35,6 +35,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.gregv21v.spendingTrackerManaged"
     }
   }
 }

@@ -62,8 +62,10 @@ class ReceiptManager extends Component {
 
 
 
-  /*
-    Deletes a receipt from the
+  /**
+    deleteReceipt()
+    @param receipt the receipt to be deleted
+    @description deletes a receipt from the list of receipts
   */
   async deleteReceipt(receipt) {
     var receiptList = this.state.receipts
@@ -81,6 +83,11 @@ class ReceiptManager extends Component {
   }
 
 
+  /**
+    pickImage()
+    @description allows you to pick a receipt image to be saved
+      with the receipt
+  */
   async pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -179,7 +186,7 @@ class ReceiptManager extends Component {
   // the action buttons for the table of receipts
   actionButtons(receipt) {
     return (
-      <SafeAreaView style={styles.actions}>
+      <View style={styles.actions}>
         <CustomButton
           buttonStyle={styles.editBtn}
           text="Edit"
@@ -196,7 +203,7 @@ class ReceiptManager extends Component {
           text="-"
           onPress={() => this.deleteReceipt(receipt)}>
         </CustomButton>
-      </SafeAreaView>
+      </View>
     )
   }
 

@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ScrollView,
-  Text, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, ScrollView, TouchableOpacity,
+  Text, Dimensions, Platform } from 'react-native';
 import Constants from 'expo-constants';
 
+import { RectButton } from 'react-native-gesture-handler';
+
+import ReceiptSwipeableRow from "./ReceiptSwipeableRow.js"
+
 import DataTable from "./DataTable.js"
+
 
 
 class ReceiptsTable extends DataTable {
 
   constructor(props) {
     super(props)
+
+    this.renderCells = this.renderCells.bind(this)
   }
 
-  // determines the color of the row
-  // based upon it's index
+  /**
+    rowColor()
+    @param index The index of the row
+    @description determines the color of a row based on its index
+  */
   rowColor(index) {
     if(index % 2 == 0) {
       return {
@@ -26,6 +36,12 @@ class ReceiptsTable extends DataTable {
     }
   }
 
+  /**
+    cellFlex()
+    @param rowLength The number of cells in the row
+    @param index The index of the current cell
+    @description determines the flex value for a given cell
+  */
   cellFlex(rowLength, index) {
     if(index == rowLength-1) {
       return {
@@ -38,35 +54,81 @@ class ReceiptsTable extends DataTable {
     }
   }
 
+  /**
+    renderCells()
+    @param row - the cells to be rendered
+    @description renders the cells of a given row
+  */
+  renderCells(row) {
+    return row.map((cell, i) => {
+        return (
+            <View
+              key={i}
+              style={[this.cellFlex(row.length, i), styles.cell]}>
+              <Text>{cell}</Text>
+            </View>
+        )
+    })
+  }
+
+  /**
+    renderRow()
+    @param row - the data of the row to render
+    @param index - the index of the row to render
+    @description renders a row of the table with the given row, and index
+  */
   renderRow(row, index) {
+    if(Platform.OS === "web") {
+      return (
+        <View key={index} style={[this.rowColor(index), styles.row]}>
+          {this.renderCells(row)}
+        </View>
+      )
+    } else {
+      return (
+        <ReceiptSwipeableRow key={index}>
+          <RectButton key={index} style={[this.rowColor(index), styles.row]}>
+            {this.renderCells(row)}
+          </RectButton>
+        </ReceiptSwipeableRow>
+      )
+    }
+  }
+
+  //{this.renderFinalRow(this.props.data.length)}
+  /**
+    renderFinalRow()
+    @param rowLength the number of columns in a the row
+    @description Renders the final row of the table
+  */
+  renderFinalRow(rowLength) {
     return (
-      <View key={index} style={[this.rowColor(index), styles.row]}>
-        {
-          row.map((cell, i) => {
-            return (
-              <View
-                key={i}
-                style={[this.cellFlex(row.length, i), styles.cell]}>
-                <Text>{cell}</Text>
-              </View>
-            )
-          })
-        }
-      </View>
+      <TouchableOpacity key={rowLength+2}
+        style={[
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+                this.rowColor(rowLength+1),
+                styles.row
+              ]}
+        onPress={this.props.addReceiptOnPress}
+      >
+        <Text style={{fontSize: 40}}>+</Text>
+      </TouchableOpacity>
     )
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.props.title}</Text>
         <ScrollView
           style={styles.scrollableView}
           automaticallyAdjustContentInsets={true}>
           {this.renderHeader()}
           {
             this.props.data.map((row, index) => {
-              return this.renderRow(row, index)
+              return this.renderRow(row, index+1)
             })
           }
         </ScrollView>
@@ -96,7 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     width: Dimensions.get("window").width - 20,
-    height: 50
+    height: 60
   },
   header: {
     borderBottomWidth: 2,
