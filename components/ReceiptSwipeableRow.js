@@ -7,29 +7,63 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 export default class ReceiptSwipeableRow extends Component {
 
-  renderRightAction = (text, color, x, progress) => {
+  constructor(props) {
+    super(props)
+  }
+
+
+
+  /**
+    renderRightAction()
+    @param progress translation progress
+    @description renders the edit button
+  */
+  renderEditButton = (progress) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
-      outputRange: [x, 0],
+      outputRange: [192, 0],
     });
-    const pressHandler = () => {
-      this.close();
-      alert(text);
-    };
     return (
       <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
         <RectButton
-          style={[styles.rightAction, { backgroundColor: color }]}
-          onPress={pressHandler}>
-          <Text style={styles.actionText}>{text}</Text>
+          style={[styles.rightAction, { backgroundColor: "orange" }]}
+          onPress={this.props.onPressEditAction}>
+          <Text style={styles.actionText}>Edit</Text>
         </RectButton>
       </Animated.View>
     );
   };
+
+  /**
+    renderRightAction()
+    @param progress translation progress
+    @description renders the delete button
+  */
+  renderEditButton = (progress) => {
+    const trans = progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [128, 0],
+    });
+    return (
+      <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
+        <RectButton
+          style={[styles.rightAction, { backgroundColor: "red" }]}
+          onPress={this.props.onPressDeleteAction}>
+          <Text style={styles.actionText}>Delete</Text>
+        </RectButton>
+      </Animated.View>
+    );
+  };
+
+  /**
+    renderRightActions()
+    @param progress ??
+    @description renders multiple right actions at once
+  */
   renderRightActions = progress => (
     <View style={{ width: 192, flexDirection: I18nManager.isRTL? 'row-reverse' : 'row' }}>
-      {this.renderRightAction('Edit', '#C8C7CD', 192, progress)}
-      {this.renderRightAction('Delete', '#ffab00', 128, progress)}
+      {this.renderEditAction(progress)}
+      {this.renderDeleteAction(progress)}
     </View>
   );
   updateRef = ref => {

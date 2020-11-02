@@ -5,7 +5,7 @@ import { TouchableOpacity, Text, View, Dimensions,
 
 import AutoCompleteField from "./AutoCompleteField.js"
 import CustomButton from "./CustomButton.js"
-import AppleStyleSwipeableRow from "./AppleStyleSwipeableRow.js"
+import ReceiptSwipeableRow from "./ReceiptSwipeableRow.js"
 
 import { FlatList, RectButton } from 'react-native-gesture-handler';
 
@@ -84,7 +84,7 @@ class TestComponent extends Component {
       )
     } else {
       return (
-        <AppleStyleSwipeableRow>
+        <ReceiptSwipeableRow>
           <RectButton style={styles.rectButton} onPress={() => alert("item.from")}>
             <Text style={styles.fromText}>Test</Text>
             <Text numberOfLines={2} style={styles.messageText}>
@@ -94,7 +94,7 @@ class TestComponent extends Component {
               Test2 {'❭'}
             </Text>
           </RectButton>
-        </AppleStyleSwipeableRow>
+        </ReceiptSwipeableRow>
       )
     }
   }

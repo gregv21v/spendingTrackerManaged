@@ -8,6 +8,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import ReceiptSwipeableRow from "./ReceiptSwipeableRow.js"
 
 import DataTable from "./DataTable.js"
+import CustomButton from "./CustomButton.js";
 
 
 
@@ -15,8 +16,6 @@ class ReceiptsTable extends DataTable {
 
   constructor(props) {
     super(props)
-
-    this.renderCells = this.renderCells.bind(this)
   }
 
   /**
@@ -54,22 +53,67 @@ class ReceiptsTable extends DataTable {
     }
   }
 
-  /**
-    renderCells()
-    @param row - the cells to be rendered
-    @description renders the cells of a given row
-  */
-  renderCells(row) {
-    return row.map((cell, i) => {
-        return (
-            <View
-              key={i}
-              style={[this.cellFlex(row.length, i), styles.cell]}>
-              <Text>{cell}</Text>
-            </View>
-        )
-    })
+
+  renderReceiptData(receipt) {
+    return (
+      <View style={styles.row}>
+        <View style={[{flex: 1/3}, styles.cell]}>
+          <Text>{receipt.getDate()}</Text>
+        </View>
+        <View style={[{flex: 1/3}, styles.cell]}>
+          <Text>{receipt.getStoreName()}</Text>
+        </View>
+        <View style={[{flex: 1/3}, styles.cell]}>
+          <Text>{receipt.getItemCount()}</Text>
+        </View>
+      </View>
+    )
   }
+
+
+
+  renderRowOnWeb(receipt, index) {
+    return (
+      <View key={index} style={[this.rowColor(index), styles.row]}>
+        {this.renderReceiptData(receipt)}
+        <View style={styles.actions}>
+          <CustomButton
+            buttonStyle={styles.editBtn}
+            text="Edit"
+            onPress={() => this.props.navigation.navigate("Receipt Editor", {
+              receipt: receipt
+            })}>
+          </CustomButton>
+          <CustomButton
+            buttonStyle={styles.deleteBtn}
+            text="Delete"
+            onPress={() => this.props.deleteReceipt(receipt)}>
+          </CustomButton>
+        </View>
+      </View>
+    )
+  }
+
+  renderRowOnMobile(receipt, index) {
+    return (
+      <ReceiptSwipeableRow
+        onPressDeleteAction={() => this.props.deleteReceipt(receipt)}
+        onPressEditAction={() => this.props.navigation.navigate("Receipt Editor", {
+          receipt: receipt
+        })}
+        key={index}>
+        <View key={index} style={[this.rowColor(index), styles.row]}>
+          {this.renderReceiptData(receipt)}
+          <RectButton style={{justifyContent: "center", alignItems: "center", width: 100}}>
+            <Text>
+              {'❭'}
+            </Text>
+          </RectButton>
+        </View>
+      </ReceiptSwipeableRow>
+    )
+  }
+
 
   /**
     renderRow()
@@ -77,22 +121,13 @@ class ReceiptsTable extends DataTable {
     @param index - the index of the row to render
     @description renders a row of the table with the given row, and index
   */
-  renderRow(row, index) {
+  renderRow(receipt, index) {
     if(Platform.OS === "web") {
-      return (
-        <View key={index} style={[this.rowColor(index), styles.row]}>
-          {this.renderCells(row)}
-        </View>
-      )
+      return this.renderRowOnWeb(receipt, index)
     } else {
-      return (
-        <ReceiptSwipeableRow key={index}>
-          <RectButton key={index} style={[this.rowColor(index), styles.row]}>
-            {this.renderCells(row)}
-          </RectButton>
-        </ReceiptSwipeableRow>
-      )
+      return this.renderRowOnMobile(receipt, index)
     }
+
   }
 
   //{this.renderFinalRow(this.props.data.length)}
@@ -127,8 +162,8 @@ class ReceiptsTable extends DataTable {
           automaticallyAdjustContentInsets={true}>
           {this.renderHeader()}
           {
-            this.props.data.map((row, index) => {
-              return this.renderRow(row, index+1)
+            this.props.receiptList.getReceiptsArray().map((receipt, index) => {
+              return this.renderRow(receipt, index+1)
             })
           }
         </ScrollView>
@@ -149,11 +184,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 20,
     height: Dimensions.get("window").height - 350
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    paddingBottom: 20,
-  },
   row: {
     flex: 1,
     flexDirection: "row",
@@ -173,7 +203,20 @@ const styles = StyleSheet.create({
   cell: {
     justifyContent: "center",
     alignItems: "center"
-  }
+  },
+  actions: {
+    flexDirection: "row",
+    flex: 2/5,
+    paddingRight: 20
+  },
+  editBtn: {
+    backgroundColor: "green",
+    flex: 0.3
+  },
+  deleteBtn: {
+    backgroundColor: "red",
+    flex: 0.3
+  },
 })
 
 export default ReceiptsTable;

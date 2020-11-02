@@ -10,7 +10,8 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
   ReceiptSwipeableRow
   adds the swipeable effect to a row in the table
 */
-export default class ReceiptSwipeableRow extends Component {
+export default class ReceiptItemSwipeableRow extends Component {
+
 
 
   /**
@@ -43,9 +44,6 @@ export default class ReceiptSwipeableRow extends Component {
 
   /**
     renderRightActions()
-    @param text the text of the button for this action
-    @param color the color of the button for this action
-    @param x the x location of this button when it is fully visible
     @param progress ??
     @description renders multiple right actions at once
   */
@@ -64,7 +62,7 @@ export default class ReceiptSwipeableRow extends Component {
     this._swipeableRow.close();
   };
 
-  
+
   render() {
     const { children } = this.props; // child components of the swipeable
     return (

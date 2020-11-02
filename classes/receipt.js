@@ -33,7 +33,7 @@ class Receipt {
     return newReceipt;
   }
 
-  
+
 
 
   // load the receipt from local storage
@@ -82,7 +82,7 @@ class Receipt {
   }
 
   getItems() {
-    return this.itemList;
+    return Object.values(this.itemList);
   }
 
   getItemCount() {

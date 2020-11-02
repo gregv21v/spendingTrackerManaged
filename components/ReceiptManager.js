@@ -21,14 +21,14 @@ class ReceiptManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: [],
       dateFieldValue: "Date",
       storeNameFieldValue: "Store Name",
-      receipts: new ReceiptList(),
+      receiptList: new ReceiptList(),
       image: {}
     }
 
     this.addReceiptOnPress = this.addReceiptOnPress.bind(this)
+    this.deleteReceipt = this.deleteReceipt.bind(this)
     this.pickImage = this.pickImage.bind(this)
   }
 
@@ -37,29 +37,11 @@ class ReceiptManager extends Component {
       (receiptList) => {
         console.log(receiptList);
         this.setState({
-          rows: this.receiptListToRows(receiptList),
-          receipts: receiptList
+          receiptList: receiptList
         })
       }
     )
   }
-
-
-  receiptListToRows(receiptList) {
-    //console.log(receiptList.receipts[0].getItemCount());
-    if(receiptList.receipts !== undefined) {
-      var rows = Object.values(receiptList.receipts).map(
-        receipt =>
-          receipt.toArray()
-            .concat(this.actionButtons(receipt))
-      )
-      return rows
-    } else {
-      return []
-    }
-  }
-
-
 
 
   /**
@@ -68,13 +50,12 @@ class ReceiptManager extends Component {
     @description deletes a receipt from the list of receipts
   */
   async deleteReceipt(receipt) {
-    var receiptList = this.state.receipts
+    var receiptList = this.state.receiptList
     receiptList.remove(receipt)
       .then(
         (resp) => {
           this.setState({
-            receipts: receiptList,
-            rows: this.receiptListToRows(receiptList)
+            receiptList: receiptList,
           })
           console.log(receiptList);
 
@@ -159,7 +140,7 @@ class ReceiptManager extends Component {
   addReceiptOnPress() {
     // add new receipt to list of receipts
 
-    var newReceiptList = this.state.receipts
+    var newReceiptList = this.state.receiptList
     newReceiptList.addNew(this.state.dateFieldValue, this.state.storeNameFieldValue)
 
     console.log(newReceiptList);
@@ -169,8 +150,7 @@ class ReceiptManager extends Component {
       .then(result => {
         // update the receipts and rows states
         this.setState({
-            rows: this.receiptListToRows(newReceiptList),
-            receipts: newReceiptList
+            receiptList: newReceiptList
         })
       })
   }
@@ -183,38 +163,15 @@ class ReceiptManager extends Component {
     )
   }
 
-  // the action buttons for the table of receipts
-  actionButtons(receipt) {
-    return (
-      <View style={styles.actions}>
-        <CustomButton
-          buttonStyle={styles.editBtn}
-          text="Edit"
-          onPress={() => this.props.navigation.navigate("Receipt Editor", {
-            receipt: receipt
-          })}>
-        </CustomButton>
-        <CustomButton
-          buttonStyle={styles.exportBtn}
-          text="Export"
-          onPress={() => this.exportReceipt(receipt)} />
-        <CustomButton
-          buttonStyle={styles.deleteBtn}
-          text="-"
-          onPress={() => this.deleteReceipt(receipt)}>
-        </CustomButton>
-      </View>
-    )
-  }
-
   render() {
     return (
       <SafeAreaView style={styles.container}>
-
           <ReceiptsTable
             title="Receipts"
             headers={["Date", "Store", "Item Count", "Actions"]}
-            data={this.state.rows} />
+            receiptList={this.state.receiptList}
+            deleteReceipt={this.deleteReceipt}
+            navigation={this.props.navigation} />
           <View style={styles.newReceiptFields}>
             <TextInput
               style={styles.field}
@@ -284,14 +241,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: "white"
   },
-  editBtn: {
-    backgroundColor: "green",
-    flex: 0.3
-  },
-  deleteBtn: {
-    backgroundColor: "red",
-    flex: 0.3
-  },
+
   exportBtn: {
     backgroundColor: "orange",
     flex: 0.3
@@ -301,11 +251,7 @@ const styles = StyleSheet.create({
     width: 100,
     flex: .3
   },
-  actions: {
-    flexDirection: "row",
-    flex: 1,
-    paddingRight: 20
-  },
+
   newReceiptFields: {
     flex: .1,
     flexDirection: "row",

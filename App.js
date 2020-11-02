@@ -13,7 +13,6 @@ import ReceiptManager from "./components/ReceiptManager.js"
 import FirebaseTest from "./components/FirebaseTest.js"
 import IPhoneTest from "./components/IPhoneTest.js"
 import TestComponent from "./components/TestComponent.js"
-import AppleStyleSwipeableRow from "./components/AppleStyleSwipeableRow.js"
 
 import * as Sentry from 'sentry-expo';
 

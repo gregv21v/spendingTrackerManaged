@@ -174,7 +174,7 @@ class ReceiptItemsTable extends DataTable {
           automaticallyAdjustContentInsets={true}>
           {this.renderHeader()}
           {
-            Object.values(this.props.receipt.itemList).map((item, index) => {
+            this.props.receipt.getItems().map((item, index) => {
               return this.renderRow(item, index)
             })
           }
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
   },
   scrollableView: {
     marginHorizontal: 40,
-    width: 700,
-    height: 500
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height
   },
   title: {
     fontSize: 20,
