@@ -187,7 +187,7 @@ class ReceiptItemsTable extends DataTable {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   actions: {
     flex: 2/5,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   scrollableView: {
     marginHorizontal: 40,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height
+    height: Dimensions.get("window").height - 200
   },
   title: {
     fontSize: 20,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   header: {
     borderBottomWidth: 2,
     flexDirection: "row",
-    width: 700
+    width: Dimensions.get("window").width
   },
   headerText: {
     color: "black",

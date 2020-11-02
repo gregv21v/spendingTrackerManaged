@@ -18,7 +18,7 @@ export default class ReceiptSwipeableRow extends Component {
     @param progress translation progress
     @description renders the edit button
   */
-  renderEditButton = (progress) => {
+  renderEditAction = (progress) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
       outputRange: [192, 0],
@@ -39,7 +39,7 @@ export default class ReceiptSwipeableRow extends Component {
     @param progress translation progress
     @description renders the delete button
   */
-  renderEditButton = (progress) => {
+  renderDeleteAction = (progress) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
       outputRange: [128, 0],
