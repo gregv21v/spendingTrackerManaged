@@ -10,13 +10,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ReceiptWindow from "./components/ReceiptWindow.js"
 import UploadTest from "./components/UploadTest.js"
 import ReceiptManager from "./components/ReceiptManager.js"
-import FirebaseTest from "./components/FirebaseTest.js"
+import LoginScreen from "./components/LoginScreen.js"
 import IPhoneTest from "./components/IPhoneTest.js"
 import TestComponent from "./components/TestComponent.js"
 
 import * as Sentry from 'sentry-expo';
 
-//import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 
 Sentry.init({
   dsn: 'https://fb1dc871450c4f9a85831b1d1da9e80b@o463964.ingest.sentry.io/5469670',
@@ -42,7 +42,13 @@ const firebaseConfig = {
   measurementId: "G-GX2Q2JDS8P"
 };
 
-//firebase.initializeApp(firebaseConfig);
+
+
+firebase.initializeApp(firebaseConfig);
+
+
+
+
 
 const Stack = createStackNavigator();
 
@@ -50,7 +56,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
+        <Stack.Screen
+          name="Login Screen"
+          component={LoginScreen}
+          options={{title: "Login Screen"}}
+        />
         <Stack.Screen
           name="Receipt Manager"
           component={ReceiptManager}
@@ -60,16 +70,6 @@ export default function App() {
           name="Receipt Editor"
           component={ReceiptWindow}
           options={{title: "Receipt Editor"}}
-        />
-        <Stack.Screen
-          name="Firebase Test"
-          component={FirebaseTest}
-          options={{title: "Firebase "}}
-        />
-        <Stack.Screen
-          name="IPhone Test"
-          component={IPhoneTest}
-          options={{title: "IPhone Test"}}
         />
         <Stack.Screen
           name="Test Component"

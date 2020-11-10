@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     height: 250
   },
   image: {
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   pickImageBtn: {
     flex: .3,
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     height: 60,
     padding: 20,
     backgroundColor: "blue"
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 0,
     justifyContent: "center",
-    width: Dimensions.get("window").width - 20
+    width: Dimensions.get("window").width
   },
   field: {
     flex: .3,

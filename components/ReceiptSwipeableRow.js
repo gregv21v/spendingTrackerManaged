@@ -9,6 +9,8 @@ export default class ReceiptSwipeableRow extends Component {
 
   constructor(props) {
     super(props)
+
+    this.deleteOnPressHandler = this.deleteOnPressHandler.bind(this)
   }
 
 
@@ -27,12 +29,17 @@ export default class ReceiptSwipeableRow extends Component {
       <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
         <RectButton
           style={[styles.rightAction, { backgroundColor: "orange" }]}
-          onPress={this.props.onPressEditAction}>
+          onPress={this.props.onPressEditAction()}>
           <Text style={styles.actionText}>Edit</Text>
         </RectButton>
       </Animated.View>
     );
   };
+
+  deleteOnPressHandler() {
+    this.props.onPressDeleteAction()
+    this.close()
+  }
 
   /**
     renderRightAction()
@@ -48,7 +55,7 @@ export default class ReceiptSwipeableRow extends Component {
       <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
         <RectButton
           style={[styles.rightAction, { backgroundColor: "red" }]}
-          onPress={this.props.onPressDeleteAction}>
+          onPress={this.deleteOnPressHandler}>
           <Text style={styles.actionText}>Delete</Text>
         </RectButton>
       </Animated.View>
@@ -57,7 +64,7 @@ export default class ReceiptSwipeableRow extends Component {
 
   /**
     renderRightActions()
-    @param progress ??
+    @param progress transition progress
     @description renders multiple right actions at once
   */
   renderRightActions = progress => (

@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   scrollableView: {
     marginHorizontal: 40,
-    width: Dimensions.get("window").width,
+    width: Dimensions.get("window").width - 10,
     height: Dimensions.get("window").height - 200
   },
   title: {
@@ -214,12 +214,13 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: "row",
+    width: Dimensions.get("window").width - 10,
     height: 50
   },
   header: {
     borderBottomWidth: 2,
     flexDirection: "row",
-    width: Dimensions.get("window").width
+    width: Dimensions.get("window").width - 10
   },
   headerText: {
     color: "black",

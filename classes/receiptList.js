@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import Receipt from "./receipt.js"
+import firebase from "firebase"
 
 class ReceiptList {
 
@@ -57,6 +58,7 @@ class ReceiptList {
       // remove the item from local storage
       await AsyncStorage.removeItem("@receipt_" + receipt.id)
 
+
       // update the ids
       await AsyncStorage.setItem("@receiptIds", JSON.stringify(this.getIds()))
 
@@ -75,6 +77,22 @@ class ReceiptList {
       var jsonString = JSON.stringify(this.getIds())
       await AsyncStorage.setItem("@receiptIds", jsonString)
       await AsyncStorage.setItem("@receiptLastId", JSON.stringify(this.lastId))
+
+      // Listen for authentication state to change.
+      firebase.auth().onAuthStateChanged(user => {
+        if (user != null) {
+          firebase
+            .database()
+            .ref("users/" + user.uid + "/receipts")
+            .set({
+              ids: this.getIds(),
+              lastId: this.lastId
+            })
+        }
+
+
+      });
+
 
 
       // save each individual receipt

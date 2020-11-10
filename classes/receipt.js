@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import firebase from "firebase"
 import Item from "./item.js"
 
 class Receipt {
@@ -62,6 +63,20 @@ class Receipt {
     try {
       var jsonString = JSON.stringify(this)
       await AsyncStorage.setItem('@receipt_' + this.id, jsonString)
+
+      firebase.auth().onAuthStateChanged(user => {
+        if (user != null) {
+          firebase
+            .database()
+            .ref("users/" + user.uid + "/receipts/" + this.id)
+            .set(this)
+        }
+
+
+      });
+
+
+
     } catch (e) {
       console.log(e);
     }

@@ -29,7 +29,7 @@ class AutoCompleteField extends Component {
       currentSuggestions: [], // the current matching suggestions
     }
 
-    this.onSubmitEditing = this.onSubmitEditing.bind(this);
+      this.onSubmitEditing = this.onSubmitEditing.bind(this);
 
   }
 

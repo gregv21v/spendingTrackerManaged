@@ -176,24 +176,24 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     flex: .6
   },
   scrollableView: {
     marginHorizontal: 40,
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     height: Dimensions.get("window").height - 350
   },
   row: {
     flex: 1,
     flexDirection: "row",
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     height: 60
   },
   header: {
     borderBottomWidth: 2,
     flexDirection: "row",
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     height: 50
   },
   headerText: {
