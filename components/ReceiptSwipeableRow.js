@@ -29,7 +29,7 @@ export default class ReceiptSwipeableRow extends Component {
       <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
         <RectButton
           style={[styles.rightAction, { backgroundColor: "orange" }]}
-          onPress={this.props.onPressEditAction()}>
+          onPress={() => this.props.onPressEditAction()}>
           <Text style={styles.actionText}>Edit</Text>
         </RectButton>
       </Animated.View>
@@ -40,6 +40,7 @@ export default class ReceiptSwipeableRow extends Component {
     this.props.onPressDeleteAction()
     this.close()
   }
+
 
   /**
     renderRightAction()
@@ -85,7 +86,6 @@ export default class ReceiptSwipeableRow extends Component {
       <Swipeable
         ref={this.updateRef}
         friction={2}
-        rightThreshold={40}
         renderRightActions={this.renderRightActions}>
         {children}
       </Swipeable>

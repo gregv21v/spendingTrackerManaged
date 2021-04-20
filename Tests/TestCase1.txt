@@ -1,0 +1,19 @@
+Test 1
+1) Add 3 receipts
+2) Edit 1 receipt on Firebase
+3) Refresh the page
+4) Remove 1 receipt (not the edited one)
+
+Expected Result:
+  On App:
+  2 receipts
+    one with its value edited
+    the second with its original value
+
+Test 2
+1) Add 1 receipt
+2) Change the date of 1 receipt on firebase
+
+Expected Result:
+  On App:
+    The receipt with it's new date on firebase, and the app 

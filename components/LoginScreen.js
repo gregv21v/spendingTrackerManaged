@@ -1,64 +1,56 @@
 import React, {Component} from 'react'
-import {Button, SafeAreaView} from "react-native"
+import {Button, SafeAreaView, Text} from "react-native"
 import firebase from "firebase"
-import * as Google from 'expo-google-app-auth';
+import * as WebBrowser from 'expo-web-browser';
+import { ResponseType } from 'expo-auth-session';
+import * as Google from 'expo-auth-session/providers/google';
+
+
+
+WebBrowser.maybeCompleteAuthSession();
 
 /**
   LoginScreen
   @description the screen to login
 */
-export default class LoginScreen extends Component {
-  constructor(props) {
-    super(props)
+export default function LoginScreen({ navigation }) {
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    //expoClientId: "698777274925-vkv3tvunj7hlds85lcq1uiap36suumvj.apps.googleusercontent.com",
+    //iosClientId: "698777274925-6baogi1phucb4tcqid452rlge7hgvbd8.apps.googleusercontent.com",
+    clientId: "698777274925-2lup1b1654tsjrtbmfm0lb79ei9hkt4n.apps.googleusercontent.com"
+    //androidClientId: "698777274925-l7kkrc588b35qaepvmkahrsvkjr3hvd6.apps.googleusercontent.com",
+    //scopes: ['profile']
+  });
 
-    this.state = {
-      loggedIn: false
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      // Build Firebase credential with the Google access token.
+      const { id_token } = response.params;
+      const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
+
+      // Sign in with credential from the Google user.
+      firebase
+        .auth()
+        .signInWithCredential(credential)
+
     }
-  }
+  }, [response])
 
-  async loginWithGoogle() {
-    try {
-      const { type, accessToken, user } = await Google.logInAsync({
-        iosClientId: "650995880874-lc5kn515p21qsjnqo77vkg8ds0i8fkn2.apps.googleusercontent.com",
-        webClientId: "650995880874-577q6155j0tesir5fob1mp0dclfqqub1.apps.googleusercontent.com",
-        scopes: ['profile'],
-      });
 
-      if (type === 'success') {
-        // Build Firebase credential with the Facebook access token.
-        const credential = firebase.auth.GoogleAuthProvider.credential(accessToken);
+  return (
+    <SafeAreaView>
+      <Button
+        onPress={() => {
+          promptAsync();
+          navigation.navigate("Receipt Manager")
+        }}
+        title="Google Login"
+         />
 
-        // Sign in with credential from the Facebook user.
-        firebase
-          .auth()
-          .signInWithCredential(credential)
-          .catch(error => {
-            // Handle Errors here.
-          });
-
-        this.setState({
-          loggedIn: true
-        })
-      } else {
-        return { cancelled: true };
-      }
-    } catch (e) {
-      return { error: true };
-    }
-  }
-
-  render() {
-    return (
-      <SafeAreaView>
-        <Button
-          onPress={() => this.loginWithGoogle()}
-          title="Login"
-          disabled={this.state.loggedIn} />
-
-        <Button
-          onPress={() => this.props.navigation.navigate("Receipt Manager")}
-          title="Receipt Manager" />
-      </SafeAreaView>
-    )
-  }
+      <Button
+        onPress={() => navigation.navigate("Receipt Manager")}
+        title="Receipt Manager" />
+    </SafeAreaView>
+  )
 }

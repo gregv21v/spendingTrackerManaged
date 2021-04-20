@@ -30,6 +30,7 @@ Sentry.init({
 // Access any @sentry/browser exports via:
 //Sentry.Browser.*
 
+
 // Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBMCXiRtINeTJPynfdqbm3nl1aVCE4Tu9s",
@@ -42,13 +43,10 @@ const firebaseConfig = {
   measurementId: "G-GX2Q2JDS8P"
 };
 
-
-
-firebase.initializeApp(firebaseConfig);
-
-
-
-
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const Stack = createStackNavigator();
 
@@ -70,11 +68,6 @@ export default function App() {
           name="Receipt Editor"
           component={ReceiptWindow}
           options={{title: "Receipt Editor"}}
-        />
-        <Stack.Screen
-          name="Test Component"
-          component={TestComponent}
-          options={{title: "Test Component"}}
         />
       </Stack.Navigator>
     </NavigationContainer>

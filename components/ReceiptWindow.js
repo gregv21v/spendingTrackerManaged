@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View,
+import { StyleSheet, View, SafeAreaView, Dimensions,
   FlatList, Text, TextInput } from 'react-native';
 
 import ReceiptItemsTable from "./ReceiptItemsTable.js"
 import CustomButton from "./CustomButton.js"
+
+import firebase from "firebase"
+import * as Sentry from "sentry-expo"
 
 
 class ReceiptWindow extends Component {
@@ -12,9 +15,9 @@ class ReceiptWindow extends Component {
     super(props)
     this.state = {
       receipt: this.props.route.params.receipt,
-      nameFieldValue: "Name",
-      quantityFieldValue: 0,
-      pricePerUnitFieldValue: 0.0
+      nameFieldValue: "",
+      quantityFieldValue: "",
+      pricePerUnitFieldValue: "",
     }
 
     this.addItemOnPress = this.addItemOnPress.bind(this)
@@ -65,7 +68,7 @@ class ReceiptWindow extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <ReceiptItemsTable
             deleteFunction={this.deleteBtnOnPress}
             handleChange={this.handleChange}
@@ -76,24 +79,30 @@ class ReceiptWindow extends Component {
             style={styles.field}
             onChangeText={text => this.setState({ quantityFieldValue: text })}
             value={this.state.quantityFieldValue}
+            placeholder="Quantity"
           />
           <TextInput
             style={styles.field}
             onChangeText={text => this.setState({ nameFieldValue: text })}
             value={this.state.nameFieldValue}
+            placeholder="Name"
           />
+        </View>
+
+        <View style={styles.fields}>
           <TextInput
             style={styles.field}
             onChangeText={text => this.setState({ pricePerUnitFieldValue: text })}
             value={this.state.pricePerUnitFieldValue}
+            placeholder="Price per unit"
           />
           <CustomButton
             buttonStyle={styles.addItemBtn}
             text="Add Item"
             onPress={this.addItemOnPress} >
           </CustomButton>
-          </View>
-      </View>
+        </View>
+      </SafeAreaView>
 
     );
   }
@@ -103,24 +112,26 @@ class ReceiptWindow extends Component {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    flex: 1
   },
   addItemBtn: {
     backgroundColor: "blue",
     margin: 5,
-    flex: .2
+    flex: .5
   },
   fields: {
     flex: 1,
     flexDirection: "row",
-    margin: 5,
     justifyContent: "center",
     alignItems: "center",
-    width: 700
+    width: Dimensions.get("window").width,
+    padding: 5
   },
   field: {
-    flex: .3,
+    flex: .5,
     height: 40,
+    padding: 5,
     borderColor: "grey",
     borderWidth: 1
   }

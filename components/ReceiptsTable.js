@@ -158,8 +158,7 @@ class ReceiptsTable extends DataTable {
     return (
       <View style={styles.container}>
         <ScrollView
-          style={styles.scrollableView}
-          automaticallyAdjustContentInsets={true}>
+          style={styles.scrollableView}>
           {this.renderHeader()}
           {
             this.props.receiptList.getReceiptsArray().map((receipt, index) => {

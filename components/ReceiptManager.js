@@ -9,6 +9,8 @@ import Receipt from "../classes/receipt.js";
 import ReceiptList from "../classes/receiptList.js"
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
+import firebase from "firebase"
+import * as Sentry from 'sentry-expo';
 
 
 /*
@@ -30,18 +32,21 @@ class ReceiptManager extends Component {
     this.addReceiptOnPress = this.addReceiptOnPress.bind(this)
     this.deleteReceipt = this.deleteReceipt.bind(this)
     this.pickImage = this.pickImage.bind(this)
+    this.refresh = this.refresh.bind(this)
   }
 
   componentWillMount() {
-    ReceiptList.load().then(
-      (receiptList) => {
-        console.log(receiptList);
-        this.setState({
-          receiptList: receiptList
-        })
+    // update the receipt list when the page loads.
+    this.setState(state => {
+      state.receiptList.setupListeners()
+      return {
+        ...state,
+        receiptList: state.receiptList
       }
-    )
+    })
   }
+
+
 
 
   /**
@@ -51,18 +56,31 @@ class ReceiptManager extends Component {
   */
   async deleteReceipt(receipt) {
     var receiptList = this.state.receiptList
-    receiptList.remove(receipt)
+    receipt.removeListener() // remove the listener that listens for database changes
+    receipt.removeFromFirebase(receipt) // remove the receipt from the firebase database
+    // remove the receipt from local storage
+    receiptList.removeFromLocalStorage(receipt)
       .then(
         (resp) => {
+          console.log(resp);
           this.setState({
             receiptList: receiptList,
           })
-          console.log(receiptList);
-
         }
       )
   }
 
+
+ refresh() {
+   // update the receipt list when the page loads.
+   this.setState(state => {
+     state.receiptList.setupListeners()
+     return {
+       ...state,
+       receiptList: state.receiptList
+     }
+   })
+ }
 
   /**
     pickImage()
@@ -144,15 +162,16 @@ class ReceiptManager extends Component {
     newReceiptList.addNew(this.state.dateFieldValue, this.state.storeNameFieldValue)
 
     console.log(newReceiptList);
-
+    newReceiptList.saveToFirebase()
     // save receipts
-    newReceiptList.save()
+    newReceiptList.saveToLocalStorage()
       .then(result => {
         // update the receipts and rows states
         this.setState({
             receiptList: newReceiptList
         })
       })
+
   }
 
 
@@ -192,7 +211,12 @@ class ReceiptManager extends Component {
         <View style={{flex: .1}}>
           <CustomButton
             buttonStyle={styles.pickImageBtn}
-            text="Pick an image from camera roll"
+            text="Refresh"
+            onPress={this.refresh}>
+          </CustomButton>
+          <CustomButton
+            buttonStyle={styles.pickImageBtn}
+            text="Upload Image"
             onPress={this.pickImage}>
           </CustomButton>
           {this.state.image && <Image source={{ uri: this.state.image }} style={styles.image} />}
